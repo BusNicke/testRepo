@@ -83,8 +83,6 @@ namespace Ovning_30
 
                     myCommand.CommandText = $"spEditContact";
                     myCommand.ExecuteNonQuery();
-
-                    UpdateTable();
                 }
                 catch (Exception)
                 {
@@ -111,7 +109,7 @@ namespace Ovning_30
                 paramFirstname.Value = firstName.Text;
                 myCommand.Parameters.Add(paramFirstname);
 
-                SqlParameter paramLastname = new SqlParameter("@lastname", SqlDbType.VarChar);
+                SqlParameter paramLastname = new SqlParameter("@firstName", SqlDbType.VarChar);
                 paramLastname.Value = lastName.Text;
                 myCommand.Parameters.Add(paramLastname);
 
