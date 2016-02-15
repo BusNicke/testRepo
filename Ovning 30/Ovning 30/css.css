@@ -1,0 +1,32 @@
+﻿body {
+    background-color: #e7f6f9;
+}
+.left{
+    margin-top: 10px;
+    float: left;
+    height: 182px;
+    width: 154px;
+    background-color: #d5e8ec;
+    margin-left: 10%;
+}
+.main{
+    margin-top: 10px;
+    float: left;   
+}
+.head{
+    color: purple;
+    font-size: 30px;
+    margin-top: 10px;
+    background-color: #c8dde1;
+}
+.buttonModal {
+  font: bold 11px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+}

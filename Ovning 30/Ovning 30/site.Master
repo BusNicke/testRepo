@@ -1,0 +1,65 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="site.Master.cs" Inherits="Ovning_30.Site1" %>
+
+<!DOCTYPE html>
+<link href="css.css" rel="stylesheet" />
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head runat="server">
+    <title></title>
+    <script src="scripts/jquery-1.9.1.js"></script>
+    <script src="scripts/bootstrap.js"></script>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <script>
+        function showEditModal(firstName, lastName, SSN, id, action) {
+            $("#myModal").modal('show');
+
+            if (action === 'edit') {
+                $(".modal-title").text('Edit Contact');
+                $(".editFirstName").val(firstName);
+                $(".editLastName").val(lastName);
+                $(".editSSN").val(SSN);
+                $(".txtId").val(id);
+                $(".txtAction").val(action);
+            }
+
+            if (action === 'add') {
+                $(".modal-title").text('Add Contact')
+                $(".editFirstName").val('');
+                $(".editLastName").val('');
+                $(".editSSN").val('');
+                $(".txtId").val(id);
+                $(".txtAction").val(action);
+            }
+
+            if (action === 'view') {
+                $(".modal-title").text('View Adress')
+                $(".editFirstName").val(firstName);
+                $(".editLastName").val(lastName);
+                $(".editSSN").val(SSN);
+                $(".txtId").val(id);
+                $(".txtAction").val(action);
+                var modal = $('#myModal');
+                var recipient = '<div class=\"container\"><h2>Contact list</h2><div class="table-responsive"><table class="table"><thead><tr><th>#</th><th>Firstname</th><th>Lastname</th><th>Age</th><th>City</th><th>Country</th></tr></thead><tbody><tr><td>1</td><td>Anna</td><td>Pitt</td><td>35</td><td>New York</td><td>USA</td></tr></tbody></table></div></div>';
+                modal.find('.modal-body a').val(recipient);
+            }
+        }
+            
+
+
+    </script>
+</head>
+
+<body>
+    <form id="form1" runat="server">
+        <div class="head">
+            <asp:ContentPlaceHolder ID="ContentPlaceHeader" runat="server">
+                &nbsp;Kontaktlista, the homepage
+            </asp:ContentPlaceHolder>
+        </div>
+        <div class="main">
+            <asp:ContentPlaceHolder ID="ContentPlaceMain" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>
