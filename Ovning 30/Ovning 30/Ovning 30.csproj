@@ -102,6 +102,7 @@
     <Content Include="site.Master" />
     <Content Include="scripts\jquery-1.9.1.min.map" />
     <Content Include="ViewContact.aspx" />
+    <Content Include="DB\contacts.bak" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
