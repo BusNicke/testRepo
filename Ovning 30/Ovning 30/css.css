@@ -30,3 +30,14 @@
   border-bottom: 1px solid #333333;
   border-left: 1px solid #CCCCCC;
 }
+/*.crop {
+    width: 50px;
+    height: auto;
+    overflow: hidden;
+}*/
+
+/*.crop img {
+    width: 400px;
+    height: 300px;
+    margin: -75px 0 0 -100px;
+}*/

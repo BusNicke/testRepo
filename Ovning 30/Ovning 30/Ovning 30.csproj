@@ -99,6 +99,11 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="pictures\BillyAskefors.jpg" />
+    <Content Include="pictures\GustavÅkman.jpg" />
+    <Content Include="pictures\JakobSegerslätt.jpg" />
+    <Content Include="pictures\JohanBergström.jpg" />
+    <Content Include="pictures\unknown.jpg" />
     <Content Include="site.Master" />
     <Content Include="scripts\jquery-1.9.1.min.map" />
     <Content Include="ViewContact.aspx" />

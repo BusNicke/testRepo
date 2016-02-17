@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -12,51 +14,44 @@ namespace Ovning_30
     public partial class WebForm3 : System.Web.UI.Page
     {
         public static int selID;
-        const string CON_STR = "Data Source=ACADEMY028-vm;Initial Catalog=Contacts;Integrated Security=SSPI";
         protected void Page_Load(object sender, EventArgs e)
         {
+            #region QueryStrings
             if (Request.QueryString["delete"] != null)
             {
                 int nr = int.Parse(Request.QueryString["delete"]);
                 DeleteContact(nr);
             }
 
-            if (Request.QueryString["mod"] != null)
+            if (txtAction.Text == "edit")
             {
-                int nr = int.Parse(Request.QueryString["mod"]);
-                EditContact(nr);
+                EditContact(int.Parse(txtId.Text));
             }
+
+            if (txtAction.Text == "add")
+            {
+                AddContact();
+            }
+
+            if (txtAction.Text == "view")
+            {
+                //ViewContact();
+            }
+            #endregion
 
             if (!IsPostBack)
             {
                 UpdateTable();
             }
-
-            if(txtAction.Text == "edit")
-            {
-                EditContact(int.Parse(txtId.Text));
-            }
-
-            if(txtAction.Text == "add")
-            {
-                AddContact();
-            }
-
-            if(txtAction.Text == "view")
-            {
-                //ViewContact();
-            }
-
         }
 
-       
 
         private void EditContact(int nr)
         {
             if (nr >= 0)
             {
                 SqlConnection myConnection = new SqlConnection();
-                myConnection.ConnectionString = CON_STR;
+                myConnection.ConnectionString = WebConfigurationManager.ConnectionStrings["GustavsSQL"].ToString();
 
                 SqlCommand myCommand = new SqlCommand();
                 myCommand.Connection = myConnection;
@@ -83,6 +78,8 @@ namespace Ovning_30
 
                     myCommand.CommandText = $"spEditContact";
                     myCommand.ExecuteNonQuery();
+
+                    UpdateTable();
                 }
                 catch (Exception)
                 {
@@ -96,46 +93,62 @@ namespace Ovning_30
 
         private void AddContact()
         {
-            SqlConnection myConnection = new SqlConnection();
-            myConnection.ConnectionString = CON_STR;
-
-            SqlCommand myCommand = new SqlCommand();
-            myCommand.Connection = myConnection;
-            myCommand.CommandType = CommandType.StoredProcedure;
-            try
+            int ssnNr;
+            if (firstName.Text.Length == 0)
             {
-                myConnection.Open();
-                SqlParameter paramFirstname = new SqlParameter("@firstName", SqlDbType.VarChar);
-                paramFirstname.Value = firstName.Text;
-                myCommand.Parameters.Add(paramFirstname);
-
-                SqlParameter paramLastname = new SqlParameter("@firstName", SqlDbType.VarChar);
-                paramLastname.Value = lastName.Text;
-                myCommand.Parameters.Add(paramLastname);
-
-                SqlParameter paramSSN = new SqlParameter("@ssn", SqlDbType.VarChar);
-                paramSSN.Value = ssn.Text;
-                myCommand.Parameters.Add(paramSSN);
-
-                SqlParameter paramID = new SqlParameter("@new_CID", SqlDbType.Int);
-                paramID.Direction = ParameterDirection.Output;
-                myCommand.Parameters.Add(paramID);
-
-                myCommand.CommandText = $"spAddContact";
-                int rows = myCommand.ExecuteNonQuery();
-
-                UpdateTable();
+                //Firstname incorrect
             }
-            catch (Exception ex)
+            else if (lastName.Text.Length == 0)
             {
-
+                //LastName incorrect
             }
-            finally
+            else if (!int.TryParse(ssn.Text, out ssnNr))
             {
-                firstName.Text = string.Empty;
-                lastName.Text = string.Empty;
-                ssn.Text = string.Empty;
-                myConnection.Close();
+                //SSN incorrect
+            }
+            else
+            {
+                SqlConnection myConnection = new SqlConnection();
+                myConnection.ConnectionString = WebConfigurationManager.ConnectionStrings["GustavsSQL"].ToString();
+
+                SqlCommand myCommand = new SqlCommand();
+                myCommand.Connection = myConnection;
+                myCommand.CommandType = CommandType.StoredProcedure;
+                try
+                {
+                    myConnection.Open();
+                    SqlParameter paramFirstname = new SqlParameter("@firstName", SqlDbType.VarChar);
+                    paramFirstname.Value = firstName.Text;
+                    myCommand.Parameters.Add(paramFirstname);
+
+                    SqlParameter paramLastname = new SqlParameter("@lastName", SqlDbType.VarChar);
+                    paramLastname.Value = lastName.Text;
+                    myCommand.Parameters.Add(paramLastname);
+
+                    SqlParameter paramSSN = new SqlParameter("@ssn", SqlDbType.VarChar);
+                    paramSSN.Value = ssn.Text;
+                    myCommand.Parameters.Add(paramSSN);
+
+                    SqlParameter paramID = new SqlParameter("@new_CID", SqlDbType.Int);
+                    paramID.Direction = ParameterDirection.Output;
+                    myCommand.Parameters.Add(paramID);
+
+                    myCommand.CommandText = $"spAddContact";
+                    int rows = myCommand.ExecuteNonQuery();
+
+                    UpdateTable();
+                }
+                catch (Exception ex)
+                {
+
+                }
+                finally
+                {
+                    firstName.Text = string.Empty;
+                    lastName.Text = string.Empty;
+                    ssn.Text = string.Empty;
+                    myConnection.Close();
+                }
             }
         }
 
@@ -144,7 +157,7 @@ namespace Ovning_30
             if (nr >= 0)
             {
                 SqlConnection myConnection = new SqlConnection();
-                myConnection.ConnectionString = CON_STR;
+                myConnection.ConnectionString = WebConfigurationManager.ConnectionStrings["GustavsSQL"].ToString();
 
                 SqlCommand myCommand = new SqlCommand();
                 myCommand.Connection = myConnection;
@@ -182,6 +195,7 @@ namespace Ovning_30
             Literal.Text += "<table class=\"table\">";
             Literal.Text += "<thead>";
             Literal.Text += "<tr>";
+            Literal.Text += "<th></th>";
             Literal.Text += "<th>#</th>";
             Literal.Text += "<th>Firstname</th>";
             Literal.Text += "<th>Lastname</th>";
@@ -194,7 +208,7 @@ namespace Ovning_30
             #endregion
             #region Adding from SQL
             SqlConnection myConnection = new SqlConnection();
-            myConnection.ConnectionString = CON_STR;
+            myConnection.ConnectionString = WebConfigurationManager.ConnectionStrings["GustavsSQL"].ToString();
 
             SqlCommand showCommand = new SqlCommand();
             showCommand.Connection = myConnection;
@@ -208,18 +222,22 @@ namespace Ovning_30
                 int count = 0;
                 while (myReader.Read())
                 {
-                    string firtNameTmp = myReader["Firstname"].ToString();
+                    string firstNameTmp = myReader["Firstname"].ToString();
                     string lastNameTmp = myReader["Lastname"].ToString();
                     string SSNTmp = myReader["SSN"].ToString();
 
                     Literal.Text += "<tbody>";
                     Literal.Text += "<tr>";
+                    if (File.Exists($@"C:\Users\Administrator\Documents\Visual Studio 2015\GitHub repoTest\testRepo\Ovning 30\Ovning 30\pictures\{firstNameTmp}{lastNameTmp}.jpg"))
+                        Literal.Text += $"<td class =\"crop\"><img src=\"pictures/{firstNameTmp}{lastNameTmp}.jpg\" class=\"img-rounded\" width=\"180\"></td>";
+                    else
+                        Literal.Text += $"<td><img src=\"pictures/unknown.jpg\" class=\"img-rounded\" width=\"180px\"></td>";
                     Literal.Text += $"<td> {++count} </td>";
-                    Literal.Text += $"<td> {firtNameTmp} </td>";
+                    Literal.Text += $"<td> {firstNameTmp} </td>";
                     Literal.Text += $"<td> {lastNameTmp} </td>";
                     Literal.Text += $"<td> {SSNTmp} </td>";
                     Literal.Text += $"<td>";
-                    Literal.Text += $"<a href=\"#\" onclick=\"showEditModal('{firtNameTmp}', '{lastNameTmp}', '{SSNTmp}', '{myReader["CID"].ToString()}', 'edit')\">Edit</a>";
+                    Literal.Text += $"<a href=\"#\" onclick=\"showEditModal('{firstNameTmp}', '{lastNameTmp}', '{SSNTmp}', '{myReader["CID"].ToString()}', 'edit')\">Edit</a>";
                     Literal.Text += $"<td>";
                     Literal.Text += $"<a href=\"index.aspx?delete={myReader["CID"].ToString()}\">Delete</a>";
                     Literal.Text += $"<td>";
@@ -243,6 +261,6 @@ namespace Ovning_30
             Literal.Text += "</div>";
             #endregion
         }
-       
+
     }
 }

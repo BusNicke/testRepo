@@ -14,37 +14,37 @@
             $("#myModal").modal('show');
 
             if (action === 'edit') {
-                $(".modal-title").text('Edit Contact');
+                $(".modal-title").text('Edit');
                 $(".editFirstName").val(firstName);
                 $(".editLastName").val(lastName);
                 $(".editSSN").val(SSN);
                 $(".txtId").val(id);
                 $(".txtAction").val(action);
+                $(".buttonName").text('Edit');
             }
 
             if (action === 'add') {
-                $(".modal-title").text('Add Contact')
+                $(".modal-title").text('Add');
                 $(".editFirstName").val('');
                 $(".editLastName").val('');
                 $(".editSSN").val('');
                 $(".txtId").val(id);
                 $(".txtAction").val(action);
+                $(".buttonName").text('Add');
             }
 
-            if (action === 'view') {
-                $(".modal-title").text('View Adress')
-                $(".editFirstName").val(firstName);
-                $(".editLastName").val(lastName);
-                $(".editSSN").val(SSN);
-                $(".txtId").val(id);
-                $(".txtAction").val(action);
-                var modal = $('#myModal');
-                var recipient = '<div class=\"container\"><h2>Contact list</h2><div class="table-responsive"><table class="table"><thead><tr><th>#</th><th>Firstname</th><th>Lastname</th><th>Age</th><th>City</th><th>Country</th></tr></thead><tbody><tr><td>1</td><td>Anna</td><td>Pitt</td><td>35</td><td>New York</td><td>USA</td></tr></tbody></table></div></div>';
-                modal.find('.modal-body a').val(recipient);
-            }
+            //if (action === 'view') {
+            //    $(".modal-title").text('View Adress')
+            //    $(".editFirstName").val(firstName);
+            //    $(".editLastName").val(lastName);
+            //    $(".editSSN").val(SSN);
+            //    $(".txtId").val(id);
+            //    $(".txtAction").val(action);
+            //    var modal = $('#myModal');
+            //    var recipient = '<div class=\"container\"><h2>Contact list</h2><div class="table-responsive"><table class="table"><thead><tr><th>#</th><th>Firstname</th><th>Lastname</th><th>Age</th><th>City</th><th>Country</th></tr></thead><tbody><tr><td>1</td><td>Anna</td><td>Pitt</td><td>35</td><td>New York</td><td>USA</td></tr></tbody></table></div></div>';
+            //    modal.find('.modal-body a').val(recipient);
+            //}
         }
-            
-
 
     </script>
 </head>
@@ -53,7 +53,19 @@
     <form id="form1" runat="server">
         <div class="head">
             <asp:ContentPlaceHolder ID="ContentPlaceHeader" runat="server">
-                &nbsp;Kontaktlista, the homepage
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="index.aspx">Den ultimata kontaktlistan</a>
+                        </div>
+                        <ul class="nav navbar-nav">
+                            <%--<li class="active"><a href="index.aspx">Home</a></li>--%>
+                            <%--<li><a href="#">Page 1</a></li>
+                            <li><a href="#">Page 2</a></li>
+                            <li><a href="#">Page 3</a></li>--%>
+                        </ul>
+                    </div>
+                </nav>
             </asp:ContentPlaceHolder>
         </div>
         <div class="main">
